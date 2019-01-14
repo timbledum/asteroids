@@ -52,7 +52,8 @@ class Ship:
 
         for point in self.points:
             point.rotate_point(rotation_angle)
-            self.direction += rotation_angle
+            
+        self.direction += rotation_angle
 
     def accelerate(self):
         acc_x, acc_y = rotate_around_origin((0, -ACCELERATION), self.direction)
@@ -77,3 +78,10 @@ class Ship:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
+
+
+
+        acc_x, acc_y = rotate_around_origin((0, -ACCELERATION), self.direction)
+        pyxel.line(
+            5, 5, 5 + acc_x, 5+acc_y, 10
+        )
