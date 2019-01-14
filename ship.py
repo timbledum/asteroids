@@ -4,20 +4,27 @@ import pyxel
 
 SHIP_POINTS = [(0, -8), (4, 4), (0, 2), (-4, 4)]
 ROTATION = 0.1
+ACCELERATION = 1
+DRAG = 0.96
 
+
+def rotate_around_origin(xy, radians):
+    """Rotate the point around the origin.
+
+    Taken from https://ls3.io/post/rotate_a_2d_coordinate_around_a_point_in_python/"""
+    x, y = xy
+    xx = x * math.cos(radians) + y * math.sin(radians)
+    yy = -x * math.sin(radians) + y * math.cos(radians)
+    return xx, yy
 
 class ShipPoint:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-    def rotate_around_point(self, radians):
-        """Rotate the point around the origin.
-
-        Taken from https://ls3.io/post/rotate_a_2d_coordinate_around_a_point_in_python/"""
-        x, y = self.x, self.y
-        self.x = x * math.cos(radians) + y * math.sin(radians)
-        self.y = -x * math.sin(radians) + y * math.cos(radians)
+    def rotate_point(self, radians):
+        """Rotate the point around the origin."""
+        self.x, self.y = rotate_around_origin((self.x, self.y), radians)
 
 
 class Ship:
@@ -25,6 +32,9 @@ class Ship:
         self.x = x
         self.y = y
         self.colour = colour
+        self.direction = 0
+        self.momentum_x = 0
+        self.momentum_y = 0
 
         self.points = []
         for point in SHIP_POINTS:
@@ -38,8 +48,24 @@ class Ship:
         else:
             raise ValueError("Direction must be the 'l'eft or 'r'ight")
 
+        rotation_angle = ROTATION * multipler
+
         for point in self.points:
-            point.rotate_around_point(ROTATION * multipler)
+            point.rotate_point(rotation_angle)
+            self.direction += rotation_angle
+
+    def accelerate(self):
+        acc_x, acc_y = rotate_around_origin((0, -ACCELERATION), self.direction)
+        self.momentum_x += acc_x
+        self.momentum_y += acc_y
+
+
+    def update_position(self):
+        self.x += self.momentum_x
+        self.y += self.momentum_y
+        self.momentum_x *= DRAG
+        self.momentum_y *= DRAG
+
 
     def display(self):
         """Display lines between each point."""
