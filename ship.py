@@ -67,6 +67,16 @@ class Ship:
         self.momentum_x *= DRAG
         self.momentum_y *= DRAG
 
+        if self.x < 0:
+            self.x = pyxel.width
+        if self.x > pyxel.width:
+            self.x = 0
+        if self.y < 0:
+            self.y = pyxel.height
+        if self.y > pyxel.height:
+            self.y = 0
+
+
 
     def display(self):
         """Display lines between each point."""
@@ -78,10 +88,3 @@ class Ship:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
-
-
-
-        acc_x, acc_y = rotate_around_origin((0, -ACCELERATION), self.direction)
-        pyxel.line(
-            5, 5, 5 + acc_x, 5+acc_y, 10
-        )
