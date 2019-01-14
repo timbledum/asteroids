@@ -58,7 +58,7 @@ class Ship:
     def accelerate(self):
         acc_x, acc_y = rotate_around_origin((0, -ACCELERATION), self.direction)
         self.momentum_x += acc_x
-        self.momentum_y += acc_y
+        self.momentum_y += acc_y   
 
 
     def update_position(self):
@@ -67,16 +67,17 @@ class Ship:
         self.momentum_x *= DRAG
         self.momentum_y *= DRAG
 
-        if self.x < 0:
-            self.x = pyxel.width
-        if self.x > pyxel.width:
-            self.x = 0
-        if self.y < 0:
-            self.y = pyxel.height
-        if self.y > pyxel.height:
-            self.y = 0
+        self.x = self.check_bounds(self.x, pyxel.width)
+        self.y = self.check_bounds(self.y, pyxel.height)
 
-
+    @staticmethod
+    def check_bounds(position, limit, buffer=7):
+        if position < 0 - buffer:
+            return limit + buffer
+        elif position > limit + buffer:
+            return -buffer
+        else:
+            return position
 
     def display(self):
         """Display lines between each point."""
@@ -88,3 +89,4 @@ class Ship:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
+
