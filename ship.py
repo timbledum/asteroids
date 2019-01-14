@@ -5,7 +5,9 @@ import pyxel
 SHIP_POINTS = [(0, -8), (4, 4), (0, 2), (-4, 4)]
 ROTATION = 0.1
 ACCELERATION = 1
-DRAG = 0.96
+MAX_ACCELERATION = 10
+DRAG = 0.98
+BUFFER = 7
 
 
 def rotate_around_origin(xy, radians):
@@ -17,8 +19,12 @@ def rotate_around_origin(xy, radians):
     yy = -x * math.sin(radians) + y * math.cos(radians)
     return xx, yy
 
+
 class ShipPoint:
+    """Class to capture points in a ship with the rotate helper method included."""
+
     def __init__(self, x, y):
+        """Initiate variables."""
         self.x = x
         self.y = y
 
@@ -58,7 +64,14 @@ class Ship:
     def accelerate(self):
         acc_x, acc_y = rotate_around_origin((0, -ACCELERATION), self.direction)
         self.momentum_x += acc_x
-        self.momentum_y += acc_y   
+        self.momentum_y += acc_y
+
+        acceleration = math.hypot(self.momentum_x, self.momentum_y)
+        if acceleration > MAX_ACCELERATION:
+            scale = MAX_ACCELERATION / acceleration
+            self.momentum_x *= scale
+            self.momentum_y *= scale
+            assert round(math.hypot(self.momentum_x, self.momentum_y), 0) == MAX_ACCELERATION
 
 
     def update_position(self):
@@ -67,11 +80,11 @@ class Ship:
         self.momentum_x *= DRAG
         self.momentum_y *= DRAG
 
-        self.x = self.check_bounds(self.x, pyxel.width)
-        self.y = self.check_bounds(self.y, pyxel.height)
+        self.x = self.check_bounds(self.x, pyxel.width, BUFFER)
+        self.y = self.check_bounds(self.y, pyxel.height, BUFFER)
 
     @staticmethod
-    def check_bounds(position, limit, buffer=7):
+    def check_bounds(position, limit, buffer):
         if position < 0 - buffer:
             return limit + buffer
         elif position > limit + buffer:
