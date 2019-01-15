@@ -5,7 +5,7 @@ Controls are **→** & **←** for turning, **↑** for acceleration and **space
 
 **Q**: Quit the game
 
-![Screenshot!](https://github.com/timbledum/asteroids/blob/master/asteroids.png)
+![Screenshot!](https://github.com/timbledum/asteroids/blob/master/asteroids.gif)
 
 ## Features: ##
 
