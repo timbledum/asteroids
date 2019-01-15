@@ -18,6 +18,9 @@ class Game:
     def update(self):
         if pyxel.btn(pyxel.KEY_UP):
             self.ship.accelerate()
+        if pyxel.btnp(pyxel.KEY_SPACE, 0, 5):
+            self.ship.shoot()
+
         if pyxel.btn(pyxel.KEY_LEFT):
             self.ship.rotate("l")
         elif pyxel.btn(pyxel.KEY_RIGHT):

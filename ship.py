@@ -2,13 +2,17 @@ import math
 
 import pyxel
 
+from bullet import Bullet
+
 SHIP_POINTS = [(0, -8), (4, 4), (0, 2), (-4, 4)]
 ROTATION = 0.1
-ACCELERATION = 1
-MAX_ACCELERATION = 10
+ACCELERATION = 0.4
+MAX_ACCELERATION = 6
 DRAG = 0.98
 BUFFER = 7
 
+BULLET_COLOUR = 11
+BULLET_VELOCITY = 5
 
 def rotate_around_origin(xy, radians):
     """Rotate the point around the origin.
@@ -18,6 +22,7 @@ def rotate_around_origin(xy, radians):
     xx = x * math.cos(radians) + y * math.sin(radians)
     yy = -x * math.sin(radians) + y * math.cos(radians)
     return xx, yy
+
 
 
 class ShipPoint:
@@ -74,6 +79,12 @@ class Ship:
             assert round(math.hypot(self.momentum_x, self.momentum_y), 0) == MAX_ACCELERATION
 
 
+    def shoot(self):
+        vel_x, vel_y = rotate_around_origin((0, -BULLET_VELOCITY), self.direction)
+        ship_tip = self.points[0]
+        Bullet(self.points[0].x + self.x, self.points[0].y + self.y, vel_x, vel_y, BULLET_COLOUR)
+
+
     def update_position(self):
         self.x += self.momentum_x
         self.y += self.momentum_y
@@ -82,6 +93,8 @@ class Ship:
 
         self.x = self.check_bounds(self.x, pyxel.width, BUFFER)
         self.y = self.check_bounds(self.y, pyxel.height, BUFFER)
+
+        Bullet.update_all()
 
     @staticmethod
     def check_bounds(position, limit, buffer):
@@ -94,6 +107,8 @@ class Ship:
 
     def display(self):
         """Display lines between each point."""
+        Bullet.display_all()
+
         for point1, point2 in zip(self.points, self.points[1:] + [self.points[0]]):
             pyxel.line(
                 x1=point1.x + self.x,
@@ -102,4 +117,5 @@ class Ship:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
+
 
