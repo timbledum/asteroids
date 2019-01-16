@@ -8,10 +8,6 @@ from utils import check_bounds, rotate_around_origin, Point
 import constants
 
 
-
-
-
-
 class Ship:
     def __init__(self, x, y, colour):
         self.x = x
@@ -68,12 +64,9 @@ class Ship:
         self.x = check_bounds(self.x, pyxel.width, constants.BUFFER)
         self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
 
-        Bullet.update_all()
-
 
     def display(self):
         """Display lines between each point."""
-        Bullet.display_all()
 
         for point1, point2 in zip(self.points, self.points[1:] + [self.points[0]]):
             pyxel.line(

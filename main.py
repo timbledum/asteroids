@@ -1,6 +1,7 @@
 import pyxel
 
 from ship import Ship
+from bullet import Bullet
 from asteroid import Asteroid
 import constants
 
@@ -15,6 +16,14 @@ class Game:
         pyxel.run(self.update, self.draw)
 
     def update(self):
+        self.check_input()
+
+        Bullet.update_all()
+        self.ship.update_position()
+        Asteroid.update_all()
+        self.check_collisions
+
+    def check_input(self):
         if pyxel.btn(pyxel.KEY_UP):
             self.ship.accelerate()
         if pyxel.btnp(pyxel.KEY_SPACE, 0, 4):
@@ -24,19 +33,17 @@ class Game:
             self.ship.rotate("l")
         elif pyxel.btn(pyxel.KEY_RIGHT):
             self.ship.rotate("r")
-        elif pyxel.btnp(pyxel.KEY_Q):
+        elif pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.KEY_ESCAPE):
             pyxel.quit()
-
-        self.ship.update_position()
-        Asteroid.update_all()
 
     def check_collisions(self):
         pass
 
     def draw(self):
         pyxel.cls(constants.BACKGROUND_COLOUR)
-        self.ship.display()
+        Bullet.display_all()
         Asteroid.display_all()
+        self.ship.display()
         
 
 if __name__ == "__main__":
