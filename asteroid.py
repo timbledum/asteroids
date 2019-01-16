@@ -49,18 +49,16 @@ class Asteroid:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
-    
+
     @staticmethod
     def initiate_game():
         for i in range(constants.ASTEROID_INITIAL_QUANTITY):
             Asteroid()
 
-
     @staticmethod
     def update_all():
         for asteroid in Asteroid.asteroids:
             asteroid.update()
-
 
     @staticmethod
     def display_all():

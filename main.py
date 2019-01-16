@@ -44,7 +44,7 @@ class Game:
         Bullet.display_all()
         Asteroid.display_all()
         self.ship.display()
-        
+
 
 if __name__ == "__main__":
     Game()

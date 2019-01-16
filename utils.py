@@ -1,5 +1,6 @@
 import math
 
+
 def check_bounds(position, limit, buffer):
     if position < 0 - buffer:
         return limit + buffer

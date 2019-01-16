@@ -1,5 +1,6 @@
 import pyxel
 
+
 class Bullet:
     bullets = []
 
@@ -15,8 +16,13 @@ class Bullet:
     def update(self):
         self.x += self.velocity_x
         self.y += self.velocity_y
-    
-        if (self.x < 0) or (self.y < 0) or (self.x > pyxel.width) or (self.y > pyxel.width):
+
+        if (
+            (self.x < 0)
+            or (self.y < 0)
+            or (self.x > pyxel.width)
+            or (self.y > pyxel.width)
+        ):
             Bullet.bullets.remove(self)
             del self
 
@@ -29,12 +35,10 @@ class Bullet:
             col=self.colour,
         )
 
-
     @staticmethod
     def update_all():
         for bullet in Bullet.bullets:
             bullet.update()
-
 
     @staticmethod
     def display_all():
