@@ -1,6 +1,7 @@
 import pyxel
 
 from ship import Ship
+from asteroid import Asteroid
 
 SHIP_COLOUR = 14
 SHIP_INITIAL_POSITION = (100, 100)
@@ -29,10 +30,16 @@ class Game:
             pyxel.quit()
 
         self.ship.update_position()
+        Asteroid.update_all()
+
+    def check_collisions(self):
+        pass
 
     def draw(self):
         pyxel.cls(BACKGROUND_COLOUR)
         self.ship.display()
+        Asteroid.display_all()
+        
 
 if __name__ == "__main__":
     Game()

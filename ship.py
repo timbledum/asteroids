@@ -3,6 +3,7 @@ import math
 import pyxel
 
 from bullet import Bullet
+from utils import check_bounds
 
 SHIP_POINTS = [(0, -8), (4, 4), (0, 2), (-4, 4)]
 ROTATION = 0.1
@@ -91,19 +92,11 @@ class Ship:
         self.momentum_x *= DRAG
         self.momentum_y *= DRAG
 
-        self.x = self.check_bounds(self.x, pyxel.width, BUFFER)
-        self.y = self.check_bounds(self.y, pyxel.height, BUFFER)
+        self.x = check_bounds(self.x, pyxel.width, BUFFER)
+        self.y = check_bounds(self.y, pyxel.height, BUFFER)
 
         Bullet.update_all()
 
-    @staticmethod
-    def check_bounds(position, limit, buffer):
-        if position < 0 - buffer:
-            return limit + buffer
-        elif position > limit + buffer:
-            return -buffer
-        else:
-            return position
 
     def display(self):
         """Display lines between each point."""
