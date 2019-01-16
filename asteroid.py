@@ -4,13 +4,8 @@ import random
 import pyxel
 
 from utils import check_bounds, rotate_around_origin, Point
-from ship import BUFFER
+import constants
 
-ASTEROID_ROTATION = 0.02
-ASTEROID_COLOUR = 6
-INITIAL_QUANTITY = 3
-
-SHAPE = [(0, -8), (4, 4), (0, 2), (-4, 4)]
 
 class Asteroid:
     asteroids = []
@@ -18,7 +13,7 @@ class Asteroid:
     def __init__(self):
         self.x = random.randint(0, pyxel.width)
         self.y = random.randint(0, pyxel.height)
-        self.colour = ASTEROID_COLOUR
+        self.colour = constants.ASTEROID_COLOUR
 
         self.direction = random.random() * math.pi * 2
         # Need to add this to initial state
@@ -26,21 +21,21 @@ class Asteroid:
         self.spin_direction = random.choice((-1, 1))
 
         self.points = []
-        for point in SHAPE:
+        for point in constants.ASTEROID_SHAPES:
             self.points.append(Point(*point))
 
         Asteroid.asteroids.append(self)
 
     def update(self):
 
-        rotation_angle = ASTEROID_ROTATION * self.spin_direction
+        rotation_angle = constants.ASTEROID_ROTATION * self.spin_direction
 
         for point in self.points:
             point.rotate_point(rotation_angle)
         # Rotate the asteroid
 
-        self.x = check_bounds(self.x, pyxel.width, BUFFER)
-        self.y = check_bounds(self.y, pyxel.height, BUFFER)
+        self.x = check_bounds(self.x, pyxel.width, constants.BUFFER)
+        self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
 
     def destroy(self):
         pass
@@ -57,7 +52,7 @@ class Asteroid:
     
     @staticmethod
     def initiate_game():
-        for i in range(INITIAL_QUANTITY):
+        for i in range(constants.ASTEROID_INITIAL_QUANTITY):
             Asteroid()
 
 

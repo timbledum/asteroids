@@ -2,17 +2,14 @@ import pyxel
 
 from ship import Ship
 from asteroid import Asteroid
-
-SHIP_COLOUR = 14
-SHIP_INITIAL_POSITION = (100, 100)
-BACKGROUND_COLOUR = 13
+import constants
 
 
 class Game:
     def __init__(self):
 
         pyxel.init(200, 200, scale=2)
-        self.ship = Ship(*SHIP_INITIAL_POSITION, SHIP_COLOUR)
+        self.ship = Ship(*constants.SHIP_INITIAL_POSITION, constants.SHIP_COLOUR)
         Asteroid.initiate_game()
 
         pyxel.run(self.update, self.draw)
@@ -37,7 +34,7 @@ class Game:
         pass
 
     def draw(self):
-        pyxel.cls(BACKGROUND_COLOUR)
+        pyxel.cls(constants.BACKGROUND_COLOUR)
         self.ship.display()
         Asteroid.display_all()
         

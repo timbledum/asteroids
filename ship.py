@@ -5,15 +5,7 @@ import pyxel
 from bullet import Bullet
 from utils import check_bounds, rotate_around_origin, Point
 
-SHIP_POINTS = [(0, -8), (4, 4), (0, 2), (-4, 4)]
-ROTATION = 0.1
-ACCELERATION = 0.4
-MAX_ACCELERATION = 6
-DRAG = 0.98
-BUFFER = 7
-
-BULLET_COLOUR = 11
-BULLET_VELOCITY = 5
+import constants
 
 
 
@@ -30,7 +22,7 @@ class Ship:
         self.momentum_y = 0
 
         self.points = []
-        for point in SHIP_POINTS:
+        for point in constants.SHIP_POINTS:
             self.points.append(Point(*point))
 
     def rotate(self, direction):
@@ -41,7 +33,7 @@ class Ship:
         else:
             raise ValueError("Direction must be the 'l'eft or 'r'ight")
 
-        rotation_angle = ROTATION * multipler
+        rotation_angle = constants.ROTATION * multipler
 
         for point in self.points:
             point.rotate_point(rotation_angle)
@@ -49,32 +41,32 @@ class Ship:
         self.direction += rotation_angle
 
     def accelerate(self):
-        acc_x, acc_y = rotate_around_origin((0, -ACCELERATION), self.direction)
+        acc_x, acc_y = rotate_around_origin((0, -constants.ACCELERATION), self.direction)
         self.momentum_x += acc_x
         self.momentum_y += acc_y
 
         acceleration = math.hypot(self.momentum_x, self.momentum_y)
-        if acceleration > MAX_ACCELERATION:
-            scale = MAX_ACCELERATION / acceleration
+        if acceleration > constants.MAX_ACCELERATION:
+            scale = constants.MAX_ACCELERATION / acceleration
             self.momentum_x *= scale
             self.momentum_y *= scale
-            assert round(math.hypot(self.momentum_x, self.momentum_y), 0) == MAX_ACCELERATION
+            assert round(math.hypot(self.momentum_x, self.momentum_y), 0) == constants.MAX_ACCELERATION
 
 
     def shoot(self):
-        vel_x, vel_y = rotate_around_origin((0, -BULLET_VELOCITY), self.direction)
+        vel_x, vel_y = rotate_around_origin((0, -constants.BULLET_VELOCITY), self.direction)
         ship_tip = self.points[0]
-        Bullet(self.points[0].x + self.x, self.points[0].y + self.y, vel_x, vel_y, BULLET_COLOUR)
+        Bullet(self.points[0].x + self.x, self.points[0].y + self.y, vel_x, vel_y, constants.BULLET_COLOUR)
 
 
     def update_position(self):
         self.x += self.momentum_x
         self.y += self.momentum_y
-        self.momentum_x *= DRAG
-        self.momentum_y *= DRAG
+        self.momentum_x *= constants.DRAG
+        self.momentum_y *= constants.DRAG
 
-        self.x = check_bounds(self.x, pyxel.width, BUFFER)
-        self.y = check_bounds(self.y, pyxel.height, BUFFER)
+        self.x = check_bounds(self.x, pyxel.width, constants.BUFFER)
+        self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
 
         Bullet.update_all()
 
