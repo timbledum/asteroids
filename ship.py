@@ -3,7 +3,7 @@ import math
 import pyxel
 
 from bullet import Bullet
-from utils import check_bounds
+from utils import check_bounds, rotate_around_origin, Point
 
 SHIP_POINTS = [(0, -8), (4, 4), (0, 2), (-4, 4)]
 ROTATION = 0.1
@@ -15,28 +15,9 @@ BUFFER = 7
 BULLET_COLOUR = 11
 BULLET_VELOCITY = 5
 
-def rotate_around_origin(xy, radians):
-    """Rotate the point around the origin.
-
-    Taken from https://ls3.io/post/rotate_a_2d_coordinate_around_a_point_in_python/"""
-    x, y = xy
-    xx = x * math.cos(radians) + y * math.sin(radians)
-    yy = -x * math.sin(radians) + y * math.cos(radians)
-    return xx, yy
 
 
 
-class ShipPoint:
-    """Class to capture points in a ship with the rotate helper method included."""
-
-    def __init__(self, x, y):
-        """Initiate variables."""
-        self.x = x
-        self.y = y
-
-    def rotate_point(self, radians):
-        """Rotate the point around the origin."""
-        self.x, self.y = rotate_around_origin((self.x, self.y), radians)
 
 
 class Ship:
@@ -50,7 +31,7 @@ class Ship:
 
         self.points = []
         for point in SHIP_POINTS:
-            self.points.append(ShipPoint(*point))
+            self.points.append(Point(*point))
 
     def rotate(self, direction):
         if direction == "l":

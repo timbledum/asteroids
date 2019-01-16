@@ -13,6 +13,7 @@ class Game:
 
         pyxel.init(200, 200, scale=2)
         self.ship = Ship(*SHIP_INITIAL_POSITION, SHIP_COLOUR)
+        Asteroid.initiate_game()
 
         pyxel.run(self.update, self.draw)
 
