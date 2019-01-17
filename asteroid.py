@@ -10,19 +10,24 @@ import constants
 class Asteroid:
     asteroids = []
 
-    def __init__(self):
+    def __init__(self, size, radius):
         self.x = random.randint(0, pyxel.width)
         self.y = random.randint(0, pyxel.height)
         self.colour = constants.ASTEROID_COLOUR
+        self.size = size
+        self.radius = radius
 
         self.direction = random.random() * math.pi * 2
-        # Need to add this to initial state
 
         self.spin_direction = random.choice((-1, 1))
 
+        asteroid_points = random.choice(constants.ASTEROID_SHAPES)
+
         self.points = []
-        for point in constants.ASTEROID_SHAPES:
-            self.points.append(Point(*point))
+        for point in asteroid_points:
+            point_new = Point(*point)
+            point_new.rotate_point(self.direction)
+            self.points.append(point_new)
 
         Asteroid.asteroids.append(self)
 
@@ -53,7 +58,7 @@ class Asteroid:
     @staticmethod
     def initiate_game():
         for i in range(constants.ASTEROID_INITIAL_QUANTITY):
-            Asteroid()
+            Asteroid(2, constants.ASTEROID_RADIUS)
 
     @staticmethod
     def update_all():
