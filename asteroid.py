@@ -22,10 +22,11 @@ class Asteroid:
         self.spin_direction = random.choice((-1, 1))
 
         asteroid_points = random.choice(constants.ASTEROID_SHAPES)
+        scale = radius / constants.ASTEROID_RADIUS
 
         self.points = []
-        for point in asteroid_points:
-            point_new = Point(*point)
+        for x, y in asteroid_points:
+            point_new = Point(x * scale, y * scale)
             point_new.rotate_point(self.direction)
             self.points.append(point_new)
 
@@ -43,7 +44,12 @@ class Asteroid:
         self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
 
     def destroy(self):
-        pass
+        if self.size > 0:
+            for _ in range(constants.ASTEROID_SPLITS):
+                Asteroid(self.size - 1, self.radius / 2)
+
+        Asteroid.asteroids.remove(self)
+        del self
 
     def display(self):
         for point1, point2 in zip(self.points, self.points[1:] + [self.points[0]]):
@@ -57,8 +63,8 @@ class Asteroid:
 
     @staticmethod
     def initiate_game():
-        for i in range(constants.ASTEROID_INITIAL_QUANTITY):
-            Asteroid(2, constants.ASTEROID_RADIUS)
+        for _ in range(constants.ASTEROID_INITIAL_QUANTITY):
+            Asteroid(constants.ASTERPOD_INITIAL_SIZE, constants.ASTEROID_RADIUS)
 
     @staticmethod
     def update_all():

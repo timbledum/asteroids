@@ -1,8 +1,10 @@
 import pyxel
+import constants
 
 
 class Bullet:
     bullets = []
+    radius = constants.BULLET_RADIUS
 
     def __init__(self, x, y, velocity_x, velocity_y, colour):
         self.x = x

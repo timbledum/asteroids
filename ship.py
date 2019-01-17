@@ -9,6 +9,8 @@ import constants
 
 
 class Ship:
+    radius = constants.SHIP_RADIUS
+
     def __init__(self, x, y, colour):
         self.x = x
         self.y = y

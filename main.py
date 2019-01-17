@@ -26,6 +26,9 @@ class Game:
     def check_input(self):
         if pyxel.btn(pyxel.KEY_UP):
             self.ship.accelerate()
+        if pyxel.btnp(pyxel.KEY_D):
+            for asteroid in Asteroid.asteroids.copy():
+                asteroid.destroy()
         if pyxel.btnp(pyxel.KEY_SPACE, 0, 4):
             self.ship.shoot()
 
