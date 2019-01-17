@@ -11,7 +11,7 @@ class Asteroid:
     asteroids = []
 
     def __init__(self, size, radius, position=None):
-        
+
         if position:
             x, y = position
             self.x = x
@@ -25,6 +25,9 @@ class Asteroid:
         self.radius = radius
 
         self.direction = random.random() * math.pi * 2
+        self.velocity = rotate_around_origin(
+            (0, -constants.ASTEROID_VELOCITY), self.direction
+        )
 
         self.spin_direction = random.choice((-1, 1))
 
@@ -45,7 +48,10 @@ class Asteroid:
 
         for point in self.points:
             point.rotate_point(rotation_angle)
-        # Rotate the asteroid
+
+        x_vol, y_vol = self.velocity
+        self.x += x_vol
+        self.y += y_vol
 
         self.x = check_bounds(self.x, pyxel.width, constants.BUFFER)
         self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
