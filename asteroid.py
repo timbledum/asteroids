@@ -10,9 +10,16 @@ import constants
 class Asteroid:
     asteroids = []
 
-    def __init__(self, size, radius):
-        self.x = random.randint(0, pyxel.width)
-        self.y = random.randint(0, pyxel.height)
+    def __init__(self, size, radius, position=None):
+        
+        if position:
+            x, y = position
+            self.x = x
+            self.y = y
+        else:
+            self.x = random.randint(0, pyxel.width)
+            self.y = random.randint(0, pyxel.height)
+
         self.colour = constants.ASTEROID_COLOUR
         self.size = size
         self.radius = radius
@@ -46,7 +53,7 @@ class Asteroid:
     def destroy(self):
         if self.size > 0:
             for _ in range(constants.ASTEROID_SPLITS):
-                Asteroid(self.size - 1, self.radius / 2)
+                Asteroid(self.size - 1, self.radius / 2, (self.x, self.y))
 
         Asteroid.asteroids.remove(self)
         del self
