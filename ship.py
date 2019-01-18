@@ -55,7 +55,6 @@ class Ship:
                 == constants.MAX_ACCELERATION
             )
 
-
     def shoot(self):
         vel_x, vel_y = rotate_around_origin(
             (0, -constants.BULLET_VELOCITY), self.direction
@@ -69,10 +68,8 @@ class Ship:
             constants.BULLET_COLOUR,
         )
 
-
     def destroy(self):
         pass
-
 
     def update_position(self):
         self.x += self.momentum_x

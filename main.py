@@ -1,3 +1,17 @@
+"""The game of asteroids in pyxel.
+
+## To dos ##
+- [ ] Somehow fix asteroids spawning to not place on player
+- [ ] Player death
+- [ ] Player death animation
+- [ ] Scoring
+- [ ] Lives
+- [ ] Get asteroids spawning (accelerating)
+- [ ] Sound effects
+- [ ] Music
+
+"""
+
 import pyxel
 
 from ship import Ship
@@ -27,9 +41,6 @@ class Game:
     def check_input(self):
         if pyxel.btn(pyxel.KEY_UP):
             self.ship.accelerate()
-        if pyxel.btnp(pyxel.KEY_D):
-            for asteroid in Asteroid.asteroids.copy():
-                asteroid.destroy()
         if pyxel.btnp(pyxel.KEY_SPACE, 0, 4):
             self.ship.shoot()
 
