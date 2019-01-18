@@ -71,7 +71,7 @@ class Ship:
 
 
     def destroy(self):
-        print("Collision detected!")
+        pass
 
 
     def update_position(self):
