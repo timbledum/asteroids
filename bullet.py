@@ -28,6 +28,10 @@ class Bullet:
             Bullet.bullets.remove(self)
             del self
 
+    def destroy(self):
+        Bullet.bullets.remove(self)
+        del self
+
     def display(self):
         pyxel.line(
             x1=self.x,

@@ -18,11 +18,15 @@ def detect_ship_asteroid_colissions(ship, asteroid_class):
     return any((detect_collision(*test_case) for test_case in test_cases))
 
 
+def return_first_match(element, lst, test):
+    for i in lst:
+        if test(element, i):
+            return i
 
 def detect_bullet_asetoid_colissions(bullet_class, asteroid_class):
     asteroid_destroy_list = []
-    for asteroid in asteroid_class.asteroids:
-        test_cases = ((asteroid, bullet) for bullet in bullet_class.bullets)
-        if any((detect_collision(*test_case) for test_case in test_cases)):
-            asteroid_destroy_list.append(asteroid)
-    return asteroid_destroy_list
+    for asteroid in asteroid_class.asteroids.copy():
+        bullet = return_first_match(asteroid, bullet_class.bullets, detect_collision)
+        if bullet:
+            bullet.destroy()
+            asteroid.destroy()

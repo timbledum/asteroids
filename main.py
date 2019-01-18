@@ -47,9 +47,7 @@ class Game:
         else:
             self.colission = False
 
-        asteroids_to_destroy = collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
-        for asteroid in asteroids_to_destroy:
-            asteroid.destroy()
+        collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
 
     def draw(self):
         pyxel.cls(constants.BACKGROUND_COLOUR + self.colission)
