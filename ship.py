@@ -1,4 +1,5 @@
 import math
+import random
 
 import pyxel
 
@@ -98,3 +99,41 @@ class Ship:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
+
+class ShipBreakup:
+    def __init__(self, ship):
+        self.x = ship.x
+        self.y = ship.y
+
+        points_deep_copy = [Point(p.x, p.y) for p in ship.points]        
+        self.ship_segments = list(zip(ship.points, points_deep_copy[1:] + points_deep_copy[:1]))
+
+        self.colour = ship.colour
+
+        def random_velocity():
+            direction = random.random() * math.pi * 2
+            velocity = rotate_around_origin(
+                (0, -constants.SHIP_DRIFT_VELOCITY), direction
+            )
+            return velocity
+            
+        self.segment_velocities = [random_velocity() for _ in self.ship_segments]
+
+    def update(self):
+        for (point1, point2), vel in zip(self.ship_segments, self.segment_velocities):
+            point1.x += vel[0]
+            point1.y += vel[1]
+            point2.x += vel[0]
+            point2.y += vel[1]
+
+    def display(self):
+        """Display lines between each point."""
+        for point1, point2 in self.ship_segments:
+            pyxel.line(
+                x1=point1.x + self.x,
+                y1=point1.y + self.y,
+                x2=point2.x + self.x,
+                y2=point2.y + self.y,
+                col=self.colour,
+            )
+

@@ -9,14 +9,14 @@
 - [x] Get asteroids spawning (accelerating)
 - [ ] Sound effects
 - [ ] Music
-- [ ] High score system
-- [ ] Reset system working
+- [ ] High score system (persisting to disk)
+- [x] Reset system working
 
 """
 
 import pyxel
 
-from ship import Ship
+from ship import Ship, ShipBreakup
 from bullet import Bullet
 from asteroid import Asteroid
 import constants
@@ -53,6 +53,8 @@ class Game:
             self.ship.update_position()
             self.check_spawn_asteroid()
             self.check_collisions()
+        else:
+            self.ship_breakup.update()
 
 
     def check_input(self):
@@ -76,6 +78,7 @@ class Game:
     def check_collisions(self):
         if collisions.detect_ship_asteroid_colissions(self.ship, Asteroid):
             self.ship.destroy()
+            self.ship_breakup = ShipBreakup(self.ship)
             self.death = True
 
         collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
@@ -97,7 +100,7 @@ class Game:
             self.draw_score()
         else:
             self.draw_death()
-
+            self.ship_breakup.display()
         
 
     def draw_score(self):
