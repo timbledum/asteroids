@@ -1,7 +1,7 @@
 """The game of asteroids in pyxel.
 
 ## To dos ##
-- [ ] Somehow fix asteroids spawning to not place on player
+- [X] Somehow fix asteroids spawning to not place on player
 - [ ] Player death
 - [ ] Player death animation
 - [ ] Scoring
@@ -28,7 +28,10 @@ class Game:
         self.ship = Ship(*constants.SHIP_INITIAL_POSITION, constants.SHIP_COLOUR)
         Asteroid.init_class(self.ship)
         Asteroid.initiate_game()
+
         self.colission = False
+        self.next_spawn = self.spawn_speed = constants.INITIAL_SPAWN_FREQUENCY
+
         pyxel.run(self.update, self.draw)
 
     def update(self):
@@ -37,6 +40,7 @@ class Game:
         Bullet.update_all()
         self.ship.update_position()
         Asteroid.update_all()
+        self.check_spawn_asteroid()
         self.check_collisions()
 
     def check_input(self):
@@ -63,6 +67,12 @@ class Game:
             self.colission = False
 
         collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
+
+    def check_spawn_asteroid(self):
+        if pyxel.frame_count >= self.next_spawn:
+            Asteroid()
+            self.next_spawn += self.spawn_speed
+            self.spawn_speed += constants.SPAWN_FREQUENCY_MOVEMENT
 
     def draw(self):
         pyxel.cls(constants.BACKGROUND_COLOUR + self.colission)

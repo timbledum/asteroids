@@ -61,7 +61,6 @@ class Asteroid:
                 ):
                     break
 
-
     @classmethod
     def init_class(cls, ship):
         cls.ship = ship
