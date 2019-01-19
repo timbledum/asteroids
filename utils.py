@@ -20,6 +20,13 @@ def rotate_around_origin(xy, radians):
     return xx, yy
 
 
+
+def center_text(text, page_width, char_width):
+    """Helper function for calcuating the start x value for centered text."""
+
+    text_width = len(text) * char_width
+    return (page_width - text_width) // 2
+
 class Point:
     """Class to capture points in an entity with the rotate helper method included."""
 
