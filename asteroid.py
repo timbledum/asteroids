@@ -17,27 +17,11 @@ class Asteroid:
         position=None,
     ):
 
-        if position:
-            x, y = position
-            self.x = x
-            self.y = y
-        else:
-            ship_x = Asteroid.ship.x
-            ship_y = Asteroid.ship.y
-
-            while True:
-                self.x = random.randint(0, pyxel.width)
-                self.y = random.randint(0, pyxel.height)
-
-                if (
-                    math.hypot(self.x - ship_x, self.y - ship_y)
-                    > constants.ASTEROID_SPAWN_BUFFER
-                ):
-                    break
-
         self.colour = constants.ASTEROID_COLOUR
         self.size = size
         self.radius = radius
+
+        self.init_position(position)
 
         self.direction = random.random() * math.pi * 2
         self.velocity = rotate_around_origin(
@@ -56,6 +40,27 @@ class Asteroid:
             self.points.append(point_new)
 
         Asteroid.asteroids.append(self)
+
+    def init_position(self, position):
+
+        if position:
+            x, y = position
+            self.x = x
+            self.y = y
+        else:
+            ship_x = Asteroid.ship.x
+            ship_y = Asteroid.ship.y
+
+            while True:
+                self.x = random.randint(0, pyxel.width)
+                self.y = random.randint(0, pyxel.height)
+
+                if (
+                    math.hypot(self.x - ship_x, self.y - ship_y)
+                    > constants.ASTEROID_SPAWN_BUFFER
+                ):
+                    break
+
 
     @classmethod
     def init_class(cls, ship):
