@@ -30,13 +30,18 @@ class Game:
         pyxel.init(200, 200, scale=2)
         self.ship = Ship(*constants.SHIP_INITIAL_POSITION, constants.SHIP_COLOUR)
         Asteroid.init_class(self.ship)
-        Asteroid.initiate_game()
 
-        self.colission = False
-        self.next_spawn = self.spawn_speed = constants.INITIAL_SPAWN_FREQUENCY
-        self.death = False
+        self.reset_game()
 
         pyxel.run(self.update, self.draw)
+
+    def reset_game(self):
+        self.ship.reset()
+        Asteroid.initiate_game()
+        self.death = False
+        self.spawn_speed = constants.INITIAL_SPAWN_FREQUENCY
+        self.next_spawn = pyxel.frame_count + self.spawn_speed
+
 
     def update(self):
         self.check_input()
@@ -62,7 +67,7 @@ class Game:
             elif pyxel.btn(pyxel.KEY_RIGHT):
                 self.ship.rotate("r")
         elif pyxel.btnp(pyxel.KEY_R):
-            pass #Reset ship and asteroids
+            self.reset_game()
 
         if pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.KEY_ESCAPE):
             pyxel.quit()
@@ -72,9 +77,6 @@ class Game:
         if collisions.detect_ship_asteroid_colissions(self.ship, Asteroid):
             self.ship.destroy()
             self.death = True
-            self.colission = True
-        else:
-            self.colission = False
 
         collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
 

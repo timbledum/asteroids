@@ -101,6 +101,8 @@ class Asteroid:
 
     @staticmethod
     def initiate_game():
+        Asteroid.asteroids.clear()
+        Asteroid.asteroid_score = 0
         for _ in range(constants.ASTEROID_INITIAL_QUANTITY):
             Asteroid()
 

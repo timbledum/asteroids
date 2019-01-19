@@ -12,9 +12,15 @@ class Ship:
     radius = constants.SHIP_RADIUS
 
     def __init__(self, x, y, colour):
-        self.x = x
-        self.y = y
-        self.colour = colour
+        self.starting_x = x
+        self.starting_y = y
+        self.starting_colour = colour
+        self.reset()
+
+    def reset(self):
+        self.x = self.starting_x
+        self.y = self.starting_y
+        self.colour = self.starting_colour
         self.direction = 0
         self.momentum_x = 0
         self.momentum_y = 0
@@ -22,6 +28,7 @@ class Ship:
         self.points = []
         for point in constants.SHIP_POINTS:
             self.points.append(Point(*point))
+
 
     def rotate(self, direction):
         if direction == "l":
