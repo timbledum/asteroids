@@ -3,14 +3,15 @@
 ## To dos ##
 - [X] Somehow fix asteroids spawning to not place on player
 - [x] Player death
-- [ ] Player death animation
+- [ ] Player death animation [still want to refine]
 - [x] Scoring
 - [-] Lives
 - [x] Get asteroids spawning (accelerating)
 - [ ] Sound effects
 - [ ] Music
-- [ ] High score system (persisting to disk)
+- [x] High score system (persisting to disk)
 - [x] Reset system working
+- [ ] Get flame on ship on acceleration
 
 """
 
@@ -43,7 +44,6 @@ class Game:
         self.spawn_speed = constants.INITIAL_SPAWN_FREQUENCY
         self.next_spawn = pyxel.frame_count + self.spawn_speed
 
-
     def update(self):
         self.check_input()
 
@@ -56,7 +56,6 @@ class Game:
             self.check_collisions()
         else:
             self.ship_breakup.update()
-
 
     def check_input(self):
         if not self.death:
@@ -75,7 +74,6 @@ class Game:
         if pyxel.btnp(pyxel.KEY_Q) or pyxel.btnp(pyxel.KEY_ESCAPE):
             pyxel.quit()
 
-
     def check_collisions(self):
         if collisions.detect_ship_asteroid_colissions(self.ship, Asteroid):
             self.death_event()
@@ -83,13 +81,13 @@ class Game:
         collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
 
     def death_event(self):
-            self.ship.destroy()
-            self.ship_breakup = ShipBreakup(self.ship)
-            self.death = True
+        self.ship.destroy()
+        self.ship_breakup = ShipBreakup(self.ship)
+        self.death = True
 
-            if Asteroid.asteroid_score > self.high_score:
-                self.high_score = Asteroid.asteroid_score
-                save_highscore(constants.HIGH_SCORE_FILE, self.high_score)
+        if Asteroid.asteroid_score > self.high_score:
+            self.high_score = Asteroid.asteroid_score
+            save_highscore(constants.HIGH_SCORE_FILE, self.high_score)
 
     def check_spawn_asteroid(self):
         if pyxel.frame_count >= self.next_spawn:
@@ -98,8 +96,10 @@ class Game:
             self.spawn_speed += constants.SPAWN_FREQUENCY_MOVEMENT
 
     def draw(self):
-        background_colour = constants.BACKGROUND_COLOUR if not self.death else constants.DEATH_COLOUR
-        
+        background_colour = (
+            constants.BACKGROUND_COLOUR if not self.death else constants.DEATH_COLOUR
+        )
+
         pyxel.cls(background_colour)
         Bullet.display_all()
         Asteroid.display_all()
@@ -109,7 +109,6 @@ class Game:
         else:
             self.draw_death()
             self.ship_breakup.display()
-        
 
     def draw_score(self):
         """Draw the score at the top."""
@@ -123,7 +122,6 @@ class Game:
         pyxel.text(3, 15, str(self.spawn_speed), constants.SCORE_COLOUR)
         pyxel.text(3, 27, str(pyxel.frame_count), constants.SCORE_COLOUR)
 
-
     def draw_death(self):
         """Draw a blank screen with some text."""
         display_text = ["YOU DIED"]
@@ -134,12 +132,23 @@ class Game:
             display_text.append("The high schore is {:04}".format(self.high_score))
 
         text_area_height = len(display_text) * (pyxel.constants.FONT_HEIGHT + 2) - 2
-        pyxel.rect(0, constants.DEATH_HEIGHT - 2, pyxel.width, constants.DEATH_HEIGHT + text_area_height, constants.DEATH_STRIP_COLOUR)
+        pyxel.rect(
+            0,
+            constants.DEATH_HEIGHT - 2,
+            pyxel.width,
+            constants.DEATH_HEIGHT + text_area_height,
+            constants.DEATH_STRIP_COLOUR,
+        )
 
         for i, text in enumerate(display_text):
             y_offset = (pyxel.constants.FONT_HEIGHT + 2) * i
-            text_x = center_text(text, pyxel.width,pyxel.constants.FONT_WIDTH)
-            pyxel.text(text_x, constants.DEATH_HEIGHT + y_offset, text, constants.DEATH_TEXT_COLOUR)
+            text_x = center_text(text, pyxel.width, pyxel.constants.FONT_WIDTH)
+            pyxel.text(
+                text_x,
+                constants.DEATH_HEIGHT + y_offset,
+                text,
+                constants.DEATH_TEXT_COLOUR,
+            )
 
 
 if __name__ == "__main__":

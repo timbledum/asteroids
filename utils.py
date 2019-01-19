@@ -1,6 +1,7 @@
 import math
 from pathlib import Path
 
+
 def check_bounds(position, limit, buffer):
     if position < 0 - buffer:
         return limit + buffer
@@ -20,7 +21,6 @@ def rotate_around_origin(xy, radians):
     return xx, yy
 
 
-
 def center_text(text, page_width, char_width):
     """Helper function for calcuating the start x value for centered text."""
 
@@ -35,8 +35,11 @@ def get_highscore(filename):
     except FileNotFoundError:
         high_score = 0
     except ValueError:
-        raise ValueError("File contents does not evaluate to string – highscore file corrupted.")
+        raise ValueError(
+            "File contents does not evaluate to string – highscore file corrupted."
+        )
     return high_score
+
 
 def save_highscore(filename, high_score):
     file = Path(__file__).parent / filename

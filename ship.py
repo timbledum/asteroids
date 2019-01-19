@@ -30,7 +30,6 @@ class Ship:
         for point in constants.SHIP_POINTS:
             self.points.append(Point(*point))
 
-
     def rotate(self, direction):
         if direction == "l":
             multipler = 1
@@ -100,13 +99,16 @@ class Ship:
                 col=self.colour,
             )
 
+
 class ShipBreakup:
     def __init__(self, ship):
         self.x = ship.x
         self.y = ship.y
 
-        points_deep_copy = [Point(p.x, p.y) for p in ship.points]        
-        self.ship_segments = list(zip(ship.points, points_deep_copy[1:] + points_deep_copy[:1]))
+        points_deep_copy = [Point(p.x, p.y) for p in ship.points]
+        self.ship_segments = list(
+            zip(ship.points, points_deep_copy[1:] + points_deep_copy[:1])
+        )
 
         self.colour = ship.colour
 
@@ -116,7 +118,7 @@ class ShipBreakup:
                 (0, -constants.SHIP_DRIFT_VELOCITY), direction
             )
             return velocity
-            
+
         self.segment_velocities = [random_velocity() for _ in self.ship_segments]
 
     def update(self):
@@ -136,4 +138,3 @@ class ShipBreakup:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
-
