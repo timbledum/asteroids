@@ -21,7 +21,7 @@ from bullet import Bullet
 from asteroid import Asteroid
 import constants
 import collisions
-from utils import center_text
+from utils import center_text, get_highscore, save_highscore
 
 
 class Game:
@@ -32,6 +32,7 @@ class Game:
         Asteroid.init_class(self.ship)
 
         self.reset_game()
+        self.high_score = get_highscore(constants.HIGH_SCORE_FILE)
 
         pyxel.run(self.update, self.draw)
 
@@ -77,11 +78,18 @@ class Game:
 
     def check_collisions(self):
         if collisions.detect_ship_asteroid_colissions(self.ship, Asteroid):
+            self.death_event()
+
+        collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
+
+    def death_event(self):
             self.ship.destroy()
             self.ship_breakup = ShipBreakup(self.ship)
             self.death = True
 
-        collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
+            if Asteroid.asteroid_score > self.high_score:
+                self.high_score = Asteroid.asteroid_score
+                save_highscore(constants.HIGH_SCORE_FILE, self.high_score)
 
     def check_spawn_asteroid(self):
         if pyxel.frame_count >= self.next_spawn:
@@ -107,7 +115,11 @@ class Game:
         """Draw the score at the top."""
 
         score = "{:04}".format(Asteroid.asteroid_score)
+        high_score = "HS:{:04}".format(self.high_score)
+        high_score_x = pyxel.width - 2 - (7 * pyxel.constants.FONT_WIDTH)
+
         pyxel.text(3, 3, score, constants.SCORE_COLOUR)
+        pyxel.text(high_score_x, 3, high_score, constants.SCORE_COLOUR)
         pyxel.text(3, 15, str(self.spawn_speed), constants.SCORE_COLOUR)
         pyxel.text(3, 27, str(pyxel.frame_count), constants.SCORE_COLOUR)
 
@@ -116,7 +128,10 @@ class Game:
         """Draw a blank screen with some text."""
         display_text = ["YOU DIED"]
         display_text.append("Your score is {:04}".format(Asteroid.asteroid_score))
-        #display_text.append("YOU HAVE A NEW HIGH SCORE!")
+        if Asteroid.asteroid_score == self.high_score:
+            display_text.append("YOU HAVE A NEW HIGH SCORE!")
+        else:
+            display_text.append("The high schore is {:04}".format(self.high_score))
 
         text_area_height = len(display_text) * (pyxel.constants.FONT_HEIGHT + 2) - 2
         pyxel.rect(0, constants.DEATH_HEIGHT - 2, pyxel.width, constants.DEATH_HEIGHT + text_area_height, constants.DEATH_STRIP_COLOUR)
