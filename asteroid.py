@@ -10,7 +10,12 @@ import constants
 class Asteroid:
     asteroids = []
 
-    def __init__(self, size=constants.ASTERPOD_INITIAL_SIZE, radius=constants.ASTEROID_RADIUS, position=None):
+    def __init__(
+        self,
+        size=constants.ASTERPOD_INITIAL_SIZE,
+        radius=constants.ASTEROID_RADIUS,
+        position=None,
+    ):
 
         if position:
             x, y = position
@@ -24,10 +29,11 @@ class Asteroid:
                 self.x = random.randint(0, pyxel.width)
                 self.y = random.randint(0, pyxel.height)
 
-                if math.hypot(self.x - ship_x, self.y - ship_y) > constants.ASTEROID_SPAWN_BUFFER:
+                if (
+                    math.hypot(self.x - ship_x, self.y - ship_y)
+                    > constants.ASTEROID_SPAWN_BUFFER
+                ):
                     break
-                print("Collision avoided")
-                    
 
         self.colour = constants.ASTEROID_COLOUR
         self.size = size
@@ -54,7 +60,6 @@ class Asteroid:
     @classmethod
     def init_class(cls, ship):
         cls.ship = ship
-
 
     def update(self):
 
