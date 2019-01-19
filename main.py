@@ -4,9 +4,9 @@
 - [X] Somehow fix asteroids spawning to not place on player
 - [ ] Player death
 - [ ] Player death animation
-- [ ] Scoring
+- [x] Scoring
 - [ ] Lives
-- [ ] Get asteroids spawning (accelerating)
+- [x] Get asteroids spawning (accelerating)
 - [ ] Sound effects
 - [ ] Music
 
@@ -86,6 +86,10 @@ class Game:
 
         score = "{:04}".format(Asteroid.asteroid_score)
         pyxel.text(3, 3, score, constants.SCORE_COLOUR)
+        pyxel.text(3, 15, str(self.spawn_speed), constants.SCORE_COLOUR)
+        pyxel.text(3, 27, str(pyxel.frame_count), constants.SCORE_COLOUR)
+
+
 
 
 if __name__ == "__main__":
