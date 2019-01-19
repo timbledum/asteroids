@@ -10,15 +10,24 @@ import constants
 class Asteroid:
     asteroids = []
 
-    def __init__(self, size, radius, position=None):
+    def __init__(self, size=constants.ASTERPOD_INITIAL_SIZE, radius=constants.ASTEROID_RADIUS, position=None):
 
         if position:
             x, y = position
             self.x = x
             self.y = y
         else:
-            self.x = random.randint(0, pyxel.width)
-            self.y = random.randint(0, pyxel.height)
+            ship_x = Asteroid.ship.x
+            ship_y = Asteroid.ship.y
+
+            while True:
+                self.x = random.randint(0, pyxel.width)
+                self.y = random.randint(0, pyxel.height)
+
+                if math.hypot(self.x - ship_x, self.y - ship_y) > constants.ASTEROID_SPAWN_BUFFER:
+                    break
+                print("Collision avoided")
+                    
 
         self.colour = constants.ASTEROID_COLOUR
         self.size = size
@@ -42,6 +51,11 @@ class Asteroid:
 
         Asteroid.asteroids.append(self)
 
+    @classmethod
+    def init_class(cls, ship):
+        cls.ship = ship
+
+
     def update(self):
 
         rotation_angle = constants.ASTEROID_ROTATION * self.spin_direction
@@ -53,8 +67,8 @@ class Asteroid:
         self.x += x_vol
         self.y += y_vol
 
-        self.x = check_bounds(self.x, pyxel.width, constants.BUFFER)
-        self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
+        self.x = check_bounds(self.x, pyxel.width, constants.ASTEROID_BUFFER)
+        self.y = check_bounds(self.y, pyxel.height, constants.ASTEROID_BUFFER)
 
     def destroy(self):
         if self.size > 0:
@@ -77,7 +91,7 @@ class Asteroid:
     @staticmethod
     def initiate_game():
         for _ in range(constants.ASTEROID_INITIAL_QUANTITY):
-            Asteroid(constants.ASTERPOD_INITIAL_SIZE, constants.ASTEROID_RADIUS)
+            Asteroid()
 
     @staticmethod
     def update_all():

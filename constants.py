@@ -1,7 +1,6 @@
 """Module to contain constants."""
 
 # General constants #
-BUFFER = 7
 BACKGROUND_COLOUR = 13
 
 # Ship related constants #
@@ -13,6 +12,7 @@ DRAG = 0.98
 ACCELERATION = 0.4
 MAX_ACCELERATION = 6
 SHIP_RADIUS = 4
+BUFFER = 7
 
 # Bullet related constants #
 BULLET_COLOUR = 11
@@ -27,6 +27,8 @@ ASTEROID_RADIUS = 16
 ASTERPOD_INITIAL_SIZE = 2
 ASTEROID_SPLITS = 3
 ASTEROID_VELOCITY = 0.5
+ASTEROID_BUFFER = 16
+ASTEROID_SPAWN_BUFFER = SHIP_RADIUS + ASTEROID_RADIUS * 2
 
 ASTEROID_SHAPES = [
     [
