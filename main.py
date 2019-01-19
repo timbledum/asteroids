@@ -79,6 +79,13 @@ class Game:
         Bullet.display_all()
         Asteroid.display_all()
         self.ship.display()
+        self.draw_score()
+
+    def draw_score(self):
+        """Draw the score at the top."""
+
+        score = "{:04}".format(Asteroid.asteroid_score)
+        pyxel.text(3, 3, score, constants.SCORE_COLOUR)
 
 
 if __name__ == "__main__":

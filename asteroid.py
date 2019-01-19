@@ -9,6 +9,7 @@ import constants
 
 class Asteroid:
     asteroids = []
+    asteroid_score = 0
 
     def __init__(
         self,
@@ -84,6 +85,7 @@ class Asteroid:
             for _ in range(constants.ASTEROID_SPLITS):
                 Asteroid(self.size - 1, self.radius / 2, (self.x, self.y))
 
+        Asteroid.asteroid_score += 1
         Asteroid.asteroids.remove(self)
         del self
 
