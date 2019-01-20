@@ -17,6 +17,7 @@ class Ship:
         self.starting_y = y
         self.starting_colour = colour
         self.reset()
+        self.accelerating = False
 
     def reset(self):
         self.x = self.starting_x
@@ -46,6 +47,8 @@ class Ship:
         self.direction += rotation_angle
 
     def accelerate(self):
+        self.accelerating = True
+
         acc_x, acc_y = rotate_around_origin(
             (0, -constants.ACCELERATION), self.direction
         )
@@ -98,6 +101,25 @@ class Ship:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
+        
+        if self.accelerating:
+            self.display_acceleration()
+
+    def display_acceleration(self):
+        x1, y1 = rotate_around_origin(
+            (0, constants.SHIP_ACCELERATION_POINTS[0]), self.direction
+        )
+        x2, y2 = rotate_around_origin(
+            (0, constants.SHIP_ACCELERATION_POINTS[1]), self.direction
+        )
+        pyxel.line(
+            x1=x1 + self.x,
+            y1=y1 + self.y,
+            x2=x2 + self.x,
+            y2=y2 + self.y,
+            col=constants.SHIP_ACCELERATION_COLOUR,
+        )
+
 
 
 class ShipBreakup:

@@ -11,7 +11,7 @@
 - [ ] Music
 - [x] High score system (persisting to disk)
 - [x] Reset system working
-- [ ] Get flame on ship on acceleration
+- [x] Get flame on ship on acceleration
 
 """
 
@@ -61,6 +61,8 @@ class Game:
         if not self.death:
             if pyxel.btn(pyxel.KEY_UP):
                 self.ship.accelerate()
+            else:
+                self.ship.accelerating = False
             if pyxel.btnp(pyxel.KEY_SPACE, 0, constants.BULLET_SHOOT_FREQUENCY):
                 self.ship.shoot()
 
