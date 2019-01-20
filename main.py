@@ -136,8 +136,6 @@ class Game:
 
         pyxel.text(3, 3, score, constants.SCORE_COLOUR)
         pyxel.text(high_score_x, 3, high_score, constants.SCORE_COLOUR)
-        pyxel.text(3, 15, str(self.spawn_speed), constants.SCORE_COLOUR)
-        pyxel.text(3, 27, str(pyxel.frame_count), constants.SCORE_COLOUR)
 
     def draw_death(self):
         """Draw a blank screen with some text."""
