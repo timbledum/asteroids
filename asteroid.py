@@ -13,16 +13,16 @@ import constants
 class Asteroid:
     """The asteroid class.
 
-The asteroid class describes the behaviour and rendering of the asteroids. This includes:
-- initial creation
-- spawning of new asteroids
-- splitting of asteroids into smaller asteroids
-- movement and rotation
+    The asteroid class describes the behaviour and rendering of the asteroids. This includes:
+    - initial creation
+    - spawning of new asteroids
+    - splitting of asteroids into smaller asteroids
+    - movement and rotation
 
-There are three different asteroid shapes described in the constants file.
+    There are three different asteroid shapes described in the constants file.
 
-On the class level, it also keeps track of all asteroids in play (and can
-render all at once), and the asteroid score."""
+    On the class level, it also keeps track of all asteroids in play (and can
+    render all at once), and the asteroid score."""
 
     asteroids = []
     asteroid_score = 0

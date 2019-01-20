@@ -1,8 +1,21 @@
+"""Module of utilities. Contains utility functions for:
+- rotation
+- bounds checking
+- text manipulation
+- disk access (persistance)
+- mini Point class (which can rotate around an origin)
+"""
+
+
 import math
 from pathlib import Path
 
 
 def check_bounds(position, limit, buffer):
+    """Check whether a co-ordinate is within a limit (including a buffer).
+
+    One dimensional, and assumes the lower limit is 0 (less the buffer)."""
+
     if position < 0 - buffer:
         return limit + buffer
     elif position > limit + buffer:
@@ -12,7 +25,7 @@ def check_bounds(position, limit, buffer):
 
 
 def rotate_around_origin(xy, radians):
-    """Rotate the point around the origin.
+    """Rotate a point around the origin.
 
     Taken from https://ls3.io/post/rotate_a_2d_coordinate_around_a_point_in_python/"""
     x, y = xy
@@ -29,6 +42,7 @@ def center_text(text, page_width, char_width):
 
 
 def get_highscore(filename):
+    """Get the highscore (integer) from a text file."""
     file = Path(__file__).parent / filename
     try:
         high_score = int(file.read_text())
@@ -42,6 +56,7 @@ def get_highscore(filename):
 
 
 def save_highscore(filename, high_score):
+    """Save an integer to a text file in the same directory as this file."""
     file = Path(__file__).parent / filename
     file.write_text(str(high_score))
 

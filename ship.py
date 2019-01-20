@@ -1,3 +1,8 @@
+"""The ship module.
+
+Defines the ship class, and the ship-breakup class (for when
+death happens)."""
+
 import math
 import random
 
@@ -11,9 +16,18 @@ import sound
 
 
 class Ship:
+    """The ship class.
+
+    The ship class describes the behaviour and rendering of the ships. This includes:
+    - initial creation
+    - resetting on new game
+    - control (rotation, acceleration and shooting)
+    """
+
     radius = constants.SHIP_RADIUS
 
     def __init__(self, x, y, colour):
+        """Set up initial variables."""
         self.starting_x = x
         self.starting_y = y
         self.starting_colour = colour
@@ -22,6 +36,7 @@ class Ship:
         self.shooting = False
 
     def reset(self):
+        """Reset the game specific variables (position, momentum and direction)."""
         self.x = self.starting_x
         self.y = self.starting_y
         self.colour = self.starting_colour
@@ -34,6 +49,7 @@ class Ship:
             self.points.append(Point(*point))
 
     def rotate(self, direction):
+        """Rotate the ship based on user input."""
         if direction == "l":
             multipler = 1
         elif direction == "r":
@@ -49,6 +65,8 @@ class Ship:
         self.direction += rotation_angle
 
     def accelerate(self):
+        """Increase the velocity (to a maximum) of the ship based on user input."""
+
         self.accelerating = True
 
         acc_x, acc_y = rotate_around_origin(
@@ -68,6 +86,7 @@ class Ship:
             )
 
     def shoot(self):
+        """Create a bullet based on the ship's direction and position."""
         vel_x, vel_y = rotate_around_origin(
             (0, -constants.BULLET_VELOCITY), self.direction
         )
@@ -81,19 +100,23 @@ class Ship:
         )
 
     def yes_shoot(self):
+        """Start the shoot sound."""
         if not self.shooting:
             sound.start_shoot()
             self.shooting = True
 
     def no_shoot(self):
+        """End the shoot sound."""
         if self.shooting:
             sound.stop_shoot()
             self.shooting = False
 
     def destroy(self):
+        """Destroy the ship (does nothing at this point)."""
         pass
 
     def update_position(self):
+        """Update the position and reduce the velocity."""
         self.x += self.momentum_x
         self.y += self.momentum_y
         self.momentum_x *= constants.DRAG
@@ -103,7 +126,7 @@ class Ship:
         self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
 
     def display(self):
-        """Display lines between each point."""
+        """Display lines between each point and display the exhaust if accelerating."""
 
         for point1, point2 in zip(self.points, self.points[1:] + [self.points[0]]):
             pyxel.line(
@@ -113,11 +136,12 @@ class Ship:
                 y2=point2.y + self.y,
                 col=self.colour,
             )
-        
+
         if self.accelerating:
             self.display_acceleration()
 
     def display_acceleration(self):
+        """Display the exhaust if accelerating."""
         x1, y1 = rotate_around_origin(
             (0, constants.SHIP_ACCELERATION_POINTS[0]), self.direction
         )
@@ -133,9 +157,16 @@ class Ship:
         )
 
 
-
 class ShipBreakup:
+    """A class based on the ship on death which displays the various pieces.
+
+    Currently displays each segment drifting at a steady rate. I would like
+    to improve this to:
+    - Rotate each line slightly.
+    - Maintain the velocity of the ship on death."""
+
     def __init__(self, ship):
+        """Coppies key parameters from ship and constructs the lines to drift."""
         self.x = ship.x
         self.y = ship.y
 
@@ -147,6 +178,7 @@ class ShipBreakup:
         self.colour = ship.colour
 
         def random_velocity():
+            """Helper function to determine a random velocity."""
             direction = random.random() * math.pi * 2
             velocity = rotate_around_origin(
                 (0, -constants.SHIP_DRIFT_VELOCITY), direction
@@ -156,6 +188,7 @@ class ShipBreakup:
         self.segment_velocities = [random_velocity() for _ in self.ship_segments]
 
     def update(self):
+        """Drift the ship segments."""
         for (point1, point2), vel in zip(self.ship_segments, self.segment_velocities):
             point1.x += vel[0]
             point1.y += vel[1]

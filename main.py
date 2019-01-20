@@ -107,10 +107,10 @@ class Game:
 
     def check_collisions(self):
         """Check for collisions between the ship and asteroids, and the bullet and asteroids."""
-        if collisions.detect_ship_asteroid_colissions(self.ship, Asteroid):
+        if collisions.detect_ship_asteroid_collisions(self.ship, Asteroid):
             self.death_event()
 
-        collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
+        collisions.detect_bullet_asteroid_collisions(Bullet, Asteroid)
 
     def death_event(self):
         """Modify game state for when the ship hits and asteroid."""
