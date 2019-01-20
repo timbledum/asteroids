@@ -146,8 +146,8 @@ class Game:
             self.ship.display()
             self.draw_score()
         else:
-            self.draw_death()
             self.ship_breakup.display()
+            self.draw_death()
 
     def draw_score(self):
         """Draw the score and the high score at the top."""
@@ -167,6 +167,7 @@ class Game:
             display_text.append("YOU HAVE A NEW HIGH SCORE!")
         else:
             display_text.append("The high score is {:04}".format(self.high_score))
+        display_text.append("(Q)uit or (R)estart")
 
         text_area_height = len(display_text) * (pyxel.constants.FONT_HEIGHT + 2) - 2
         pyxel.rect(
