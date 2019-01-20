@@ -4,6 +4,7 @@
 Controls are **→** & **←** for turning, **↑** for acceleration and **space** for shooting! 
 
 **Q**: Quit the game
+**R**: Restart the game
 
 ![Screenshot!](https://github.com/timbledum/asteroids/blob/master/asteroids.gif)
 
