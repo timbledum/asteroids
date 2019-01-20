@@ -1,3 +1,5 @@
+"""Module with convenience functions for triggering various sound events."""
+
 from pathlib import Path
 
 import pyxel

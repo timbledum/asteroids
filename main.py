@@ -1,34 +1,47 @@
-"""The game of asteroids in pyxel.
+"""# Asteroids #
+## The classic game of asteroids implemented in [Pyxel](https://github.com/kitao/pyxel)! ##
 
-## To dos ##
-- [X] Somehow fix asteroids spawning to not place on player
-- [x] Player death
-- [ ] Player death animation [still want to refine]
-- [x] Scoring
-- [-] Lives
-- [x] Get asteroids spawning (accelerating)
-- [x] Sound effects
-- [ ] Music
-- [x] High score system (persisting to disk)
-- [x] Reset system working
-- [x] Get flame on ship on acceleration
-- [ ] Tidy up and document
+Controls are **→** & **←** for turning, **↑** for acceleration and **space** for shooting! 
+
+**Q**: Quit the game
+
+![Screenshot!](https://github.com/timbledum/asteroids/blob/master/asteroids.gif)
+
+## Features: ##
+
+1. Moving!
+2. Shooting!
+3. Enemies (asteroids)!
+4. Sound effects!
+5. High scores!
+6. More?
+
+## Installation ##
+
+1. Install [Python 3](https://www.python.org)
+2. Install [Pyxel](https://github.com/kitao/pyxel) using their instructions
+3. Clone or copy this repository
+4. `python3 main.py` at the command line (if on windows use `py main.py`).
+
 
 """
 
 import pyxel
 
-from ship import Ship, ShipBreakup
-from bullet import Bullet
 from asteroid import Asteroid
-import constants
+from bullet import Bullet
 import collisions
+import constants
 from utils import center_text, get_highscore, save_highscore
+from ship import Ship, ShipBreakup
 import sound
 
 
 class Game:
+    """Manage the game state and various classes."""
+
     def __init__(self):
+        """Initialise pyxel and various classes and variables (one off)."""
 
         pyxel.init(200, 200, scale=2)
         self.ship = Ship(*constants.SHIP_INITIAL_POSITION, constants.SHIP_COLOUR)
@@ -41,6 +54,7 @@ class Game:
         pyxel.run(self.update, self.draw)
 
     def reset_game(self):
+        """Initialise start of game state (reset ship position, score, and asteroids)."""
         self.ship.reset()
         Asteroid.initiate_game()
         self.death = False
@@ -48,6 +62,7 @@ class Game:
         self.next_spawn = pyxel.frame_count + self.spawn_speed
 
     def update(self):
+        """Update the game state, including the asteroids, ship and bullets."""
         self.check_input()
 
         Bullet.update_all()
@@ -61,6 +76,7 @@ class Game:
             self.ship_breakup.update()
 
     def check_input(self):
+        """Check for input and modify the game state accordingly."""
         if not self.death:
             if pyxel.btn(pyxel.KEY_UP):
                 if not self.ship.accelerating:
@@ -90,12 +106,14 @@ class Game:
             pyxel.quit()
 
     def check_collisions(self):
+        """Check for collisions between the ship and asteroids, and the bullet and asteroids."""
         if collisions.detect_ship_asteroid_colissions(self.ship, Asteroid):
             self.death_event()
 
         collisions.detect_bullet_asetoid_colissions(Bullet, Asteroid)
 
     def death_event(self):
+        """Modify game state for when the ship hits and asteroid."""
         self.ship.destroy()
         self.ship_breakup = ShipBreakup(self.ship)
         self.death = True
@@ -106,6 +124,9 @@ class Game:
             save_highscore(constants.HIGH_SCORE_FILE, self.high_score)
 
     def check_spawn_asteroid(self):
+        """Keep track of the time and spawn new asteroids when appropriate.
+        
+        Asteroids spawn on a reducing time scale (time decreases by a certain percentage each time."""
         if pyxel.frame_count >= self.next_spawn:
             Asteroid()
             self.next_spawn += self.spawn_speed
@@ -113,6 +134,7 @@ class Game:
             sound.spawn()
 
     def draw(self):
+        """Master method for drawing the board. Mainly calls the display methods of the various classes."""
         background_colour = (
             constants.BACKGROUND_COLOUR if not self.death else constants.DEATH_COLOUR
         )
@@ -128,7 +150,7 @@ class Game:
             self.ship_breakup.display()
 
     def draw_score(self):
-        """Draw the score at the top."""
+        """Draw the score and the high score at the top."""
 
         score = "{:04}".format(Asteroid.asteroid_score)
         high_score = "HS:{:04}".format(self.high_score)
@@ -138,7 +160,7 @@ class Game:
         pyxel.text(high_score_x, 3, high_score, constants.SCORE_COLOUR)
 
     def draw_death(self):
-        """Draw a blank screen with some text."""
+        """Draw the display text for the end of the game with the score."""
         display_text = ["YOU DIED"]
         display_text.append("Your score is {:04}".format(Asteroid.asteroid_score))
         if Asteroid.asteroid_score == self.high_score:
