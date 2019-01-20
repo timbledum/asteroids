@@ -144,7 +144,7 @@ class Game:
         if Asteroid.asteroid_score == self.high_score:
             display_text.append("YOU HAVE A NEW HIGH SCORE!")
         else:
-            display_text.append("The high schore is {:04}".format(self.high_score))
+            display_text.append("The high score is {:04}".format(self.high_score))
 
         text_area_height = len(display_text) * (pyxel.constants.FONT_HEIGHT + 2) - 2
         pyxel.rect(
