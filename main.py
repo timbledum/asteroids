@@ -7,11 +7,12 @@
 - [x] Scoring
 - [-] Lives
 - [x] Get asteroids spawning (accelerating)
-- [ ] Sound effects
+- [x] Sound effects
 - [ ] Music
 - [x] High score system (persisting to disk)
 - [x] Reset system working
 - [x] Get flame on ship on acceleration
+- [ ] Tidy up and document
 
 """
 
@@ -23,6 +24,7 @@ from asteroid import Asteroid
 import constants
 import collisions
 from utils import center_text, get_highscore, save_highscore
+import sound
 
 
 class Game:
@@ -31,6 +33,7 @@ class Game:
         pyxel.init(200, 200, scale=2)
         self.ship = Ship(*constants.SHIP_INITIAL_POSITION, constants.SHIP_COLOUR)
         Asteroid.init_class(self.ship)
+        sound.init_music()
 
         self.reset_game()
         self.high_score = get_highscore(constants.HIGH_SCORE_FILE)
@@ -60,11 +63,21 @@ class Game:
     def check_input(self):
         if not self.death:
             if pyxel.btn(pyxel.KEY_UP):
+                if not self.ship.accelerating:
+                    sound.start_accelerate()
                 self.ship.accelerate()
             else:
+                if self.ship.accelerating:
+                    sound.stop_accelerate()
                 self.ship.accelerating = False
+
             if pyxel.btnp(pyxel.KEY_SPACE, 0, constants.BULLET_SHOOT_FREQUENCY):
                 self.ship.shoot()
+
+            if pyxel.btn(pyxel.KEY_SPACE):
+                self.ship.yes_shoot()
+            else:
+                self.ship.no_shoot()
 
             if pyxel.btn(pyxel.KEY_LEFT):
                 self.ship.rotate("l")
@@ -86,6 +99,7 @@ class Game:
         self.ship.destroy()
         self.ship_breakup = ShipBreakup(self.ship)
         self.death = True
+        sound.death()
 
         if Asteroid.asteroid_score > self.high_score:
             self.high_score = Asteroid.asteroid_score
@@ -96,6 +110,7 @@ class Game:
             Asteroid()
             self.next_spawn += self.spawn_speed
             self.spawn_speed *= constants.SPAWN_FREQUENCY_MOVEMENT
+            sound.spawn()
 
     def draw(self):
         background_colour = (

@@ -7,6 +7,7 @@ from bullet import Bullet
 from utils import check_bounds, rotate_around_origin, Point
 
 import constants
+import sound
 
 
 class Ship:
@@ -18,6 +19,7 @@ class Ship:
         self.starting_colour = colour
         self.reset()
         self.accelerating = False
+        self.shooting = False
 
     def reset(self):
         self.x = self.starting_x
@@ -77,6 +79,16 @@ class Ship:
             vel_y,
             constants.BULLET_COLOUR,
         )
+
+    def yes_shoot(self):
+        if not self.shooting:
+            sound.start_shoot()
+            self.shooting = True
+
+    def no_shoot(self):
+        if self.shooting:
+            sound.stop_shoot()
+            self.shooting = False
 
     def destroy(self):
         pass

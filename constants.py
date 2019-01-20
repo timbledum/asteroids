@@ -12,6 +12,7 @@ INITIAL_SPAWN_FREQUENCY = 300
 SPAWN_FREQUENCY_MOVEMENT = 0.9
 
 HIGH_SCORE_FILE = "score.txt"
+SOUND_FILE = "sound.pyxel"
 
 # Ship related constants #
 SHIP_COLOUR = 14

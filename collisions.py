@@ -1,6 +1,7 @@
 """Module for keeping track and detecting collisions."""
 
 from itertools import product
+import sound
 
 
 def detect_collision(object1, object2):
@@ -33,3 +34,4 @@ def detect_bullet_asetoid_colissions(bullet_class, asteroid_class):
         if bullet:
             bullet.destroy()
             asteroid.destroy()
+            sound.hit()
