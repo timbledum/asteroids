@@ -95,7 +95,7 @@ class Game:
         if pyxel.frame_count >= self.next_spawn:
             Asteroid()
             self.next_spawn += self.spawn_speed
-            self.spawn_speed += constants.SPAWN_FREQUENCY_MOVEMENT
+            self.spawn_speed *= constants.SPAWN_FREQUENCY_MOVEMENT
 
     def draw(self):
         background_colour = (
