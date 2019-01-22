@@ -158,24 +158,12 @@ class Ship:
 
 
 class ShipBreakup:
-    """A class based on the ship on death which displays the various pieces.
-
-    Currently displays each segment drifting at a steady rate. I would like
-    to improve this to:
-    - Rotate each line slightly.
-    - Maintain the velocity of the ship on death."""
+    """A class based on the ship on death which displays the various segements
+    drifting aimlessly in space."""
 
     def __init__(self, ship):
         """Coppies key parameters from ship and constructs the lines to drift."""
-        self.x = ship.x
-        self.y = ship.y
-
-        points_deep_copy = [Point(p.x, p.y) for p in ship.points]
-        self.ship_segments = list(
-            zip(ship.points, points_deep_copy[1:] + points_deep_copy[:1])
-        )
-
-        self.colour = ship.colour
+        self.segments = []
 
         def random_velocity():
             """Helper function to determine a random velocity."""
@@ -185,23 +173,88 @@ class ShipBreakup:
             )
             return velocity
 
-        self.segment_velocities = [random_velocity() for _ in self.ship_segments]
+        for point1, point2 in zip(ship.points, ship.points[1:] + [ship.points[0]]):
+            rvel_x, rvel_y = random_velocity()
+            line_velocity = (rvel_x + ship.momentum_x, rvel_y + ship.momentum_y)
+            spin = constants.SHIP_BREAKUP_ROTATION * random.choice((-1, 1))
+
+            line = Line.line_from_two_points(
+                point1.x + ship.x,
+                point1.y + ship.y,
+                point2.x + ship.x,
+                point2.y + ship.y,
+                velocity=line_velocity,
+                spin=spin,
+                colour=ship.colour,
+            )
+            self.segments.append(line)
 
     def update(self):
         """Drift the ship segments."""
-        for (point1, point2), vel in zip(self.ship_segments, self.segment_velocities):
-            point1.x += vel[0]
-            point1.y += vel[1]
-            point2.x += vel[0]
-            point2.y += vel[1]
+        for segment in self.segments:
+            segment.update()
 
     def display(self):
         """Display lines between each point."""
-        for point1, point2 in self.ship_segments:
-            pyxel.line(
-                x1=point1.x + self.x,
-                y1=point1.y + self.y,
-                x2=point2.x + self.x,
-                y2=point2.y + self.y,
-                col=self.colour,
-            )
+        for segment in self.segments:
+            segment.display()
+
+
+class Line:
+    """Class to contain a rotating line segment."""
+
+    def __init__(self, x, y, length, direction, velocity, spin, colour):
+        """Initialise variables and set ends of the line.
+        
+        The provided x and y are of the center point."""
+        self.x = x
+        self.y = y
+        self.length = length
+        self.direction = direction
+        self.vel_x, self.vel_y = velocity
+        self.spin = spin
+        self.colour = colour
+
+        self.points = []
+        for end in (1, -1):
+            self.points.append(Point(0, end * self.length / 2))
+
+        self.rotate(direction)
+
+    @classmethod
+    def line_from_two_points(cls, x1, y1, x2, y2, velocity, spin, colour):
+        """Construct a line from two points rather than a point, a direction, and a length."""
+        x = sum((x1, x2)) / 2
+        y = sum((y1, y2)) / 2
+        length = math.hypot(x1 - x2, y1 - y2)
+        direction = -math.atan2(y1 - y2, x1 - x2) - math.pi / 2
+        return cls(x, y, length, direction, velocity, spin, colour)
+
+    def rotate(self, radians):
+        """Rotate both points around center."""
+        for point in self.points:
+            point.rotate_point(radians)
+
+    def update(self):
+        """Update the position and rotate."""
+        self.x += self.vel_x
+        self.y += self.vel_y
+
+        self.vel_x *= constants.SHIP_BREAKUP_DRAG
+        self.vel_y *= constants.SHIP_BREAKUP_DRAG
+
+        self.x = check_bounds(self.x, pyxel.width, constants.BUFFER)
+        self.y = check_bounds(self.y, pyxel.height, constants.BUFFER)
+
+        self.rotate(self.spin)
+
+    def display(self):
+        """Display lines between each point and display the exhaust if accelerating."""
+        point1, point2 = self.points
+        pyxel.line(
+            x1=point1.x + self.x,
+            y1=point1.y + self.y,
+            x2=point2.x + self.x,
+            y2=point2.y + self.y,
+            col=self.colour,
+        )
