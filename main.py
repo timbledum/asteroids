@@ -154,7 +154,7 @@ class Game:
 
         score = "{:04}".format(Asteroid.asteroid_score)
         high_score = "HS:{:04}".format(self.high_score)
-        high_score_x = pyxel.width - 2 - (7 * pyxel.constants.FONT_WIDTH)
+        high_score_x = pyxel.width - 2 - (7 * pyxel.FONT_WIDTH)
 
         pyxel.text(3, 3, score, constants.SCORE_COLOUR)
         pyxel.text(high_score_x, 3, high_score, constants.SCORE_COLOUR)
@@ -169,18 +169,18 @@ class Game:
             display_text.append("The high score is {:04}".format(self.high_score))
         display_text.append("(Q)uit or (R)estart")
 
-        text_area_height = len(display_text) * (pyxel.constants.FONT_HEIGHT + 2) - 2
+        text_area_height = len(display_text) * (pyxel.FONT_HEIGHT + 2) - 2
         pyxel.rect(
-            0,
-            constants.DEATH_HEIGHT - 2,
-            pyxel.width,
-            constants.DEATH_HEIGHT + text_area_height,
-            constants.DEATH_STRIP_COLOUR,
+            x=0,
+            y=constants.DEATH_HEIGHT - 2,
+            w=pyxel.width,
+            h=text_area_height + 4,
+            col=constants.DEATH_STRIP_COLOUR,
         )
 
         for i, text in enumerate(display_text):
-            y_offset = (pyxel.constants.FONT_HEIGHT + 2) * i
-            text_x = center_text(text, pyxel.width, pyxel.constants.FONT_WIDTH)
+            y_offset = (pyxel.FONT_HEIGHT + 2) * i
+            text_x = center_text(text, pyxel.width, pyxel.FONT_WIDTH)
             pyxel.text(
                 text_x,
                 constants.DEATH_HEIGHT + y_offset,
