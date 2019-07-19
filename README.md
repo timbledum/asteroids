@@ -6,6 +6,8 @@ Controls are **→** & **←** for turning, **↑** for acceleration and **space
 **Q**: Quit the game
 **R**: Restart the game
 
+Use pyxel version >= 1.1.6
+
 ![Screenshot!](https://github.com/timbledum/asteroids/blob/master/asteroids.gif)
 
 ## Features: ##
