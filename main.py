@@ -43,7 +43,7 @@ class Game:
     def __init__(self):
         """Initialise pyxel and various classes and variables (one off)."""
 
-        pyxel.init(200, 200, scale=2)
+        pyxel.init(200, 200, display_scale=2)
         self.ship = Ship(*constants.SHIP_INITIAL_POSITION, constants.SHIP_COLOUR)
         Asteroid.init_class(self.ship)
         sound.init_music()

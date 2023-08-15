@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 score.txt
+out/
 
 # C extensions
 *.so

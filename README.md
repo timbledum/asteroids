@@ -6,7 +6,7 @@ Controls are **→** & **←** for turning, **↑** for acceleration and **space
 **Q**: Quit the game
 **R**: Restart the game
 
-Use pyxel version >= 1.3.0
+Requires pyxel version == 1.9.18
 
 ![Screenshot!](https://github.com/timbledum/asteroids/blob/master/asteroids.gif)
 
@@ -30,3 +30,6 @@ Use pyxel version >= 1.3.0
 ## Changelog ##
 
 * 12 April 2020: corrected resource file for compatability with newer versions of pyxel, correct colour choices to better match the new palette in pyxel 1.3.0 onwards.
+* 15 August 2023: updated init to match new pyxel versoin.
+
+By Marcus Croucher - 2023 :)
